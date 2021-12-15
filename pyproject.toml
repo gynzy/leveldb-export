@@ -1,9 +1,13 @@
 [tool.poetry]
 name = "leveldb-export"
-version = "0.1.0-alpha-0"
+version = "0.1.1"
 description = "Package to export documents from LevelDB export (for instance Firestore)."
 authors = ["Joël Luijmes <me@joell.dev>"]
 license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/joelluijmes/leveldb-export"
+repository = "https://github.com/joelluijmes/leveldb-export"
+keywords = ["firestore", "leveldb", "export", "firestore-export", "leveldb-export"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
