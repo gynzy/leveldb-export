@@ -29,11 +29,8 @@ RECORD_TYPE_MIDDLE = 3
 RECORD_TYPE_LAST = 4
 
 
-class Error(Exception):
-    """Base class for exceptions in this module."""
 
-
-class InvalidRecordError(Error):
+class InvalidRecordError(Exception):
     """Raised when invalid record encountered."""
 
 
