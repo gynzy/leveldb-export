@@ -29,7 +29,6 @@ RECORD_TYPE_MIDDLE = 3
 RECORD_TYPE_LAST = 4
 
 
-
 class InvalidRecordError(Exception):
     """Raised when invalid record encountered."""
 
@@ -109,17 +108,13 @@ class RecordsReader(object):
 
         data = self.__reader.read(length)
         if len(data) != length:
-            raise EOFError(
-                "Not enough data read. Expected: %s but got %s" % (length, len(data))
-            )
+            raise EOFError("Not enough data read. Expected: %s but got %s" % (length, len(data)))
 
         if record_type == RECORD_TYPE_NONE:
             return ("", record_type)
 
         if not self.no_check_crc:
-            actual_crc = google_crc32c.value(
-                record_type.to_bytes(RECORD_TYPE_LENGTH, ENDIANNESS) + data
-            )
+            actual_crc = google_crc32c.value(record_type.to_bytes(RECORD_TYPE_LENGTH, ENDIANNESS) + data)
             if actual_crc != _unmask_crc(masked_crc):
                 raise InvalidRecordError("Data crc does not match")
         return (data, record_type)
@@ -144,24 +139,21 @@ class RecordsReader(object):
                 elif record_type == RECORD_TYPE_FULL:
                     if data is not None:
                         logging.warning(
-                            "Ordering corruption: Got FULL record while already "
-                            "in a chunk at offset %d",
+                            "Ordering corruption: Got FULL record while already " "in a chunk at offset %d",
                             last_offset,
                         )
                     return chunk
                 elif record_type == RECORD_TYPE_FIRST:
                     if data is not None:
                         logging.warning(
-                            "Ordering corruption: Got FIRST record while already "
-                            "in a chunk at offset %d",
+                            "Ordering corruption: Got FIRST record while already " "in a chunk at offset %d",
                             last_offset,
                         )
                     data = chunk
                 elif record_type == RECORD_TYPE_MIDDLE:
                     if data is None:
                         logging.warning(
-                            "Ordering corruption: Got MIDDLE record before FIRST "
-                            "record at offset %d",
+                            "Ordering corruption: Got MIDDLE record before FIRST " "record at offset %d",
                             last_offset,
                         )
                     else:
@@ -169,8 +161,7 @@ class RecordsReader(object):
                 elif record_type == RECORD_TYPE_LAST:
                     if data is None:
                         logging.warning(
-                            "Ordering corruption: Got LAST record but no chunk is in "
-                            "progress at offset %d",
+                            "Ordering corruption: Got LAST record but no chunk is in " "progress at offset %d",
                             last_offset,
                         )
                     else:
@@ -178,9 +169,7 @@ class RecordsReader(object):
                         data = None
                         return result
                 else:
-                    raise InvalidRecordError(
-                        "Unsupported record type: %s" % record_type
-                    )
+                    raise InvalidRecordError("Unsupported record type: %s" % record_type)
 
             except InvalidRecordError:
                 logging.warning(

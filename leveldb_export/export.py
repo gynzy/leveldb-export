@@ -11,7 +11,7 @@ from .utils import embedded_entity_to_dict
 
 def parse_entity_field(value):
     """Function for recursive parsing (e.g., arrays)"""
-    
+
     if isinstance(value, EmbeddedEntity):
         # Some nested document
         return embedded_entity_to_dict(value, {})
@@ -29,7 +29,7 @@ def parse_leveldb_documents(path_or_fp: Union[str, BytesIO]) -> Generator[dict, 
     namespace and kind.
 
     Args:
-        - path_or_fp (str | io.BytesIO): path to local file (if str) or an open file pointer. 
+        - path_or_fp (str | io.BytesIO): path to local file (if str) or an open file pointer.
             Note, if not str it assumes the file is already open and user is responsible
             for closing the file.
 
@@ -41,10 +41,9 @@ def parse_leveldb_documents(path_or_fp: Union[str, BytesIO]) -> Generator[dict, 
         - Generator[dict]: generator returning each distinctive document.
     """
 
-
     # Open the file if path was provided
     if isinstance(path_or_fp, str):
-        fp = open(path_or_fp, 'rb')
+        fp = open(path_or_fp, "rb")
     else:
         fp = path_or_fp
 
