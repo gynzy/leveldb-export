@@ -47,13 +47,30 @@ def embedded_entity_to_dict(embedded_entity, data):
     ep.ParseFromString(embedded_entity)
     d = MessageToDict(ep)
     for entry in d.get("rawProperty", []):
-        name = entry.get("name")
-        value = entry.get("value")
+        name = entry["name"]
+        encoded_value = entry["value"]
+
+        # Nested object
         if entry.get("meaning") == "ENTITY_PROTO":
-            dt = {}
-            data[name] = embedded_entity_to_dict(get_value(value, raw=True), dt)
+            value = embedded_entity_to_dict(get_value(encoded_value, raw=True), {})
         else:
-            data[name] = get_value(value)
+            value = get_value(encoded_value)
+
+        # Value is array type
+        if entry["multiple"]:
+            data.setdefault(name, [])
+            data[name].append(value)
+        else:
+            # Assert we don't have already a value
+            assert data.get(name) is None
+            data[name] = value
+
+    # Empty arrays are stored in as different property in leveldb
+    for entry in d.get("property", []):
+        assert entry.get("meaning") == "EMPTY_LIST"
+        name = entry["name"]
+        data[name] = []
+
     return data
 
 
