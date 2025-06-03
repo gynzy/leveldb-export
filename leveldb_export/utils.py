@@ -39,7 +39,7 @@ def get_value(value: Dict, raw=False):
         # not certain why, but without the cast to `int` here it shows up as a str in the output
         return int(v)
 
-    return value.get("doubleValue", value.get("booleanValue"))
+    return value.get("doubleValue", value.get("booleanValue", value.get("pointvalue")))
 
 
 def embedded_entity_to_dict(embedded_entity, data):
